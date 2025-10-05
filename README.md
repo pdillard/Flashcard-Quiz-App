@@ -181,23 +181,6 @@ case 95...100:
 ## 👤 Author
 
 **Preston Dillard**  
-CSE 310 – Applied Programming  
-Module #1 | Language - Swift
-
-## 📅 Project Timeline
-
-- **Week 1**: Learning Swift fundamentals with "Hacking with Swift"
-- **Week 2**: Building, testing, and documenting the Flashcard Quiz Program
-
-## 📝 License
-
-This project is created for educational purposes as part of CSE 310 coursework.
-
-## 🙏 Acknowledgments
-
-- "Hacking with Swift" tutorial series for Swift fundamentals
-- CSE 310 course materials and instructor guidance
-
 ---
 
 **Note**: This is a command-line application. An iOS app version with SwiftUI interface is planned for future development.
