@@ -6,6 +6,10 @@ A command-line quiz application written in Swift that tests your knowledge acros
 
 The Flashcard Quiz App is an educational tool that quizzes users with randomized questions from various categories. Users can select their preferred topic, answer questions, and receive immediate feedback on their performance. The program tracks scores and provides detailed results with performance ratings at the end of each quiz session.
 
+## 🎥 Video
+
+This is the [link] [https://youtu.be/WWNMS0cTSTc].
+
 ## ✨ Features
 
 - **Multiple Categories**: Choose from Math, Science, History, Geography, Literature, or All Categories
