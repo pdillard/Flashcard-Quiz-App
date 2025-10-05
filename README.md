@@ -8,8 +8,7 @@ The Flashcard Quiz App is an educational tool that quizzes users with randomized
 
 ## 🎥 Video
 
-This is the [link].
-[link]:https://youtu.be/WWNMS0cTSTc
+This is the [link](https://youtu.be/WWNMS0cTSTc/).
 
 ## ✨ Features
 
