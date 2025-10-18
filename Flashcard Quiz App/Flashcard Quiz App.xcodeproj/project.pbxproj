@@ -6,32 +6,68 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXCopyFilesBuildPhase section */
-		5A96E6E02E91EA2500DC2603 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
+/* Begin PBXBuildFile section */
+		5A0A76172EA03BCF00A3E924 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5A0A76162EA03BCF00A3E924 /* FirebaseFirestore */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5A0A75E12EA0275000A3E924 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A0A75CB2EA0274D00A3E924 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5A0A75D22EA0274D00A3E924;
+			remoteInfo = "Flashcard Quiz App";
 		};
-/* End PBXCopyFilesBuildPhase section */
+		5A0A75EB2EA0275000A3E924 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A0A75CB2EA0274D00A3E924 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5A0A75D22EA0274D00A3E924;
+			remoteInfo = "Flashcard Quiz App";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5A96E6E22E91EA2500DC2603 /* Flashcard Quiz App */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Flashcard Quiz App"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A0A75D32EA0274D00A3E924 /* Flashcard Quiz App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flashcard Quiz App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A0A75E02EA0275000A3E924 /* Flashcard Quiz AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Flashcard Quiz AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A0A75EA2EA0275000A3E924 /* Flashcard Quiz AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Flashcard Quiz AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		5A96E6E42E91EA2500DC2603 /* Flashcard Quiz App */ = {
+		5A0A75D52EA0274D00A3E924 /* Flashcard Quiz App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Flashcard Quiz App";
+			sourceTree = "<group>";
+		};
+		5A0A75E32EA0275000A3E924 /* Flashcard Quiz AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Flashcard Quiz AppTests";
+			sourceTree = "<group>";
+		};
+		5A0A75ED2EA0275000A3E924 /* Flashcard Quiz AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Flashcard Quiz AppUITests";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		5A96E6DF2E91EA2500DC2603 /* Frameworks */ = {
+		5A0A75D02EA0274D00A3E924 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A0A76172EA03BCF00A3E924 /* FirebaseFirestore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A0A75DD2EA0275000A3E924 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A0A75E72EA0275000A3E924 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -41,18 +77,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5A96E6D92E91EA2500DC2603 = {
+		5A0A75CA2EA0274D00A3E924 = {
 			isa = PBXGroup;
 			children = (
-				5A96E6E42E91EA2500DC2603 /* Flashcard Quiz App */,
-				5A96E6E32E91EA2500DC2603 /* Products */,
+				5A0A75D52EA0274D00A3E924 /* Flashcard Quiz App */,
+				5A0A75E32EA0275000A3E924 /* Flashcard Quiz AppTests */,
+				5A0A75ED2EA0275000A3E924 /* Flashcard Quiz AppUITests */,
+				5A0A75D42EA0274D00A3E924 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		5A96E6E32E91EA2500DC2603 /* Products */ = {
+		5A0A75D42EA0274D00A3E924 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5A96E6E22E91EA2500DC2603 /* Flashcard Quiz App */,
+				5A0A75D32EA0274D00A3E924 /* Flashcard Quiz App.app */,
+				5A0A75E02EA0275000A3E924 /* Flashcard Quiz AppTests.xctest */,
+				5A0A75EA2EA0275000A3E924 /* Flashcard Quiz AppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -60,64 +100,162 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5A96E6E12E91EA2500DC2603 /* Flashcard Quiz App */ = {
+		5A0A75D22EA0274D00A3E924 /* Flashcard Quiz App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5A96E6E92E91EA2500DC2603 /* Build configuration list for PBXNativeTarget "Flashcard Quiz App" */;
+			buildConfigurationList = 5A0A75F42EA0275000A3E924 /* Build configuration list for PBXNativeTarget "Flashcard Quiz App" */;
 			buildPhases = (
-				5A96E6DE2E91EA2500DC2603 /* Sources */,
-				5A96E6DF2E91EA2500DC2603 /* Frameworks */,
-				5A96E6E02E91EA2500DC2603 /* CopyFiles */,
+				5A0A75CF2EA0274D00A3E924 /* Sources */,
+				5A0A75D02EA0274D00A3E924 /* Frameworks */,
+				5A0A75D12EA0274D00A3E924 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				5A96E6E42E91EA2500DC2603 /* Flashcard Quiz App */,
+				5A0A75D52EA0274D00A3E924 /* Flashcard Quiz App */,
 			);
 			name = "Flashcard Quiz App";
 			packageProductDependencies = (
+				5A0A76162EA03BCF00A3E924 /* FirebaseFirestore */,
 			);
 			productName = "Flashcard Quiz App";
-			productReference = 5A96E6E22E91EA2500DC2603 /* Flashcard Quiz App */;
-			productType = "com.apple.product-type.tool";
+			productReference = 5A0A75D32EA0274D00A3E924 /* Flashcard Quiz App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5A0A75DF2EA0275000A3E924 /* Flashcard Quiz AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A0A75F72EA0275000A3E924 /* Build configuration list for PBXNativeTarget "Flashcard Quiz AppTests" */;
+			buildPhases = (
+				5A0A75DC2EA0275000A3E924 /* Sources */,
+				5A0A75DD2EA0275000A3E924 /* Frameworks */,
+				5A0A75DE2EA0275000A3E924 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A0A75E22EA0275000A3E924 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5A0A75E32EA0275000A3E924 /* Flashcard Quiz AppTests */,
+			);
+			name = "Flashcard Quiz AppTests";
+			packageProductDependencies = (
+			);
+			productName = "Flashcard Quiz AppTests";
+			productReference = 5A0A75E02EA0275000A3E924 /* Flashcard Quiz AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		5A0A75E92EA0275000A3E924 /* Flashcard Quiz AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A0A75FA2EA0275000A3E924 /* Build configuration list for PBXNativeTarget "Flashcard Quiz AppUITests" */;
+			buildPhases = (
+				5A0A75E62EA0275000A3E924 /* Sources */,
+				5A0A75E72EA0275000A3E924 /* Frameworks */,
+				5A0A75E82EA0275000A3E924 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A0A75EC2EA0275000A3E924 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5A0A75ED2EA0275000A3E924 /* Flashcard Quiz AppUITests */,
+			);
+			name = "Flashcard Quiz AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "Flashcard Quiz AppUITests";
+			productReference = 5A0A75EA2EA0275000A3E924 /* Flashcard Quiz AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		5A96E6DA2E91EA2500DC2603 /* Project object */ = {
+		5A0A75CB2EA0274D00A3E924 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
-					5A96E6E12E91EA2500DC2603 = {
+					5A0A75D22EA0274D00A3E924 = {
 						CreatedOnToolsVersion = 26.0.1;
+					};
+					5A0A75DF2EA0275000A3E924 = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 5A0A75D22EA0274D00A3E924;
+					};
+					5A0A75E92EA0275000A3E924 = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 5A0A75D22EA0274D00A3E924;
 					};
 				};
 			};
-			buildConfigurationList = 5A96E6DD2E91EA2500DC2603 /* Build configuration list for PBXProject "Flashcard Quiz App" */;
+			buildConfigurationList = 5A0A75CE2EA0274D00A3E924 /* Build configuration list for PBXProject "Flashcard Quiz App" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 5A96E6D92E91EA2500DC2603;
+			mainGroup = 5A0A75CA2EA0274D00A3E924;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				5A0A76152EA03BCE00A3E924 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 5A96E6E32E91EA2500DC2603 /* Products */;
+			productRefGroup = 5A0A75D42EA0274D00A3E924 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5A96E6E12E91EA2500DC2603 /* Flashcard Quiz App */,
+				5A0A75D22EA0274D00A3E924 /* Flashcard Quiz App */,
+				5A0A75DF2EA0275000A3E924 /* Flashcard Quiz AppTests */,
+				5A0A75E92EA0275000A3E924 /* Flashcard Quiz AppUITests */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		5A0A75D12EA0274D00A3E924 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A0A75DE2EA0275000A3E924 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A0A75E82EA0275000A3E924 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		5A96E6DE2E91EA2500DC2603 /* Sources */ = {
+		5A0A75CF2EA0274D00A3E924 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A0A75DC2EA0275000A3E924 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A0A75E62EA0275000A3E924 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -126,8 +264,21 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		5A0A75E22EA0275000A3E924 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5A0A75D22EA0274D00A3E924 /* Flashcard Quiz App */;
+			targetProxy = 5A0A75E12EA0275000A3E924 /* PBXContainerItemProxy */;
+		};
+		5A0A75EC2EA0275000A3E924 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5A0A75D22EA0274D00A3E924 /* Flashcard Quiz App */;
+			targetProxy = 5A0A75EB2EA0275000A3E924 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		5A96E6E72E91EA2500DC2603 /* Debug */ = {
+		5A0A75F22EA0275000A3E924 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -190,7 +341,7 @@
 			};
 			name = Debug;
 		};
-		5A96E6E82E91EA2500DC2603 /* Release */ = {
+		5A0A75F32EA0275000A3E924 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -245,50 +396,221 @@
 			};
 			name = Release;
 		};
-		5A96E6EA2E91EA2500DC2603 /* Debug */ = {
+		5A0A75F52EA0275000A3E924 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "name.prestondillard.Flashcard-Quiz-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		5A96E6EB2E91EA2500DC2603 /* Release */ = {
+		5A0A75F62EA0275000A3E924 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "name.prestondillard.Flashcard-Quiz-App";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		5A0A75F82EA0275000A3E924 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "name.prestondillard.Flashcard-Quiz-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Flashcard Quiz App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Flashcard Quiz App";
+			};
+			name = Debug;
+		};
+		5A0A75F92EA0275000A3E924 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "name.prestondillard.Flashcard-Quiz-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Flashcard Quiz App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Flashcard Quiz App";
+			};
+			name = Release;
+		};
+		5A0A75FB2EA0275000A3E924 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "name.prestondillard.Flashcard-Quiz-AppUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Flashcard Quiz App";
+			};
+			name = Debug;
+		};
+		5A0A75FC2EA0275000A3E924 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "name.prestondillard.Flashcard-Quiz-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Flashcard Quiz App";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5A96E6DD2E91EA2500DC2603 /* Build configuration list for PBXProject "Flashcard Quiz App" */ = {
+		5A0A75CE2EA0274D00A3E924 /* Build configuration list for PBXProject "Flashcard Quiz App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5A96E6E72E91EA2500DC2603 /* Debug */,
-				5A96E6E82E91EA2500DC2603 /* Release */,
+				5A0A75F22EA0275000A3E924 /* Debug */,
+				5A0A75F32EA0275000A3E924 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5A96E6E92E91EA2500DC2603 /* Build configuration list for PBXNativeTarget "Flashcard Quiz App" */ = {
+		5A0A75F42EA0275000A3E924 /* Build configuration list for PBXNativeTarget "Flashcard Quiz App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5A96E6EA2E91EA2500DC2603 /* Debug */,
-				5A96E6EB2E91EA2500DC2603 /* Release */,
+				5A0A75F52EA0275000A3E924 /* Debug */,
+				5A0A75F62EA0275000A3E924 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A0A75F72EA0275000A3E924 /* Build configuration list for PBXNativeTarget "Flashcard Quiz AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A0A75F82EA0275000A3E924 /* Debug */,
+				5A0A75F92EA0275000A3E924 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A0A75FA2EA0275000A3E924 /* Build configuration list for PBXNativeTarget "Flashcard Quiz AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A0A75FB2EA0275000A3E924 /* Debug */,
+				5A0A75FC2EA0275000A3E924 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5A0A76152EA03BCE00A3E924 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5A0A76162EA03BCF00A3E924 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A0A76152EA03BCE00A3E924 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 5A96E6DA2E91EA2500DC2603 /* Project object */;
+	rootObject = 5A0A75CB2EA0274D00A3E924 /* Project object */;
 }
