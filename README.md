@@ -9,6 +9,7 @@ The Flashcard Quiz App is an educational tool that quizzes users with randomized
 ## 🎥 Video
 
 This is the [link](https://youtu.be/WWNMS0cTSTc/) to module#1.
+This is the [link](https://youtu.be/mC5zO1WXgDA/) to module#2.
 
 ## ✨ Features
 
@@ -95,10 +96,7 @@ This project was created as part of CSE 310 – Applied Programming to:
    - See visual feedback (green for correct, red for incorrect)
    - View your progress bar at the top
    - Review final results with animated score reveal
-
-### App Screenshots
-*(Screenshots would typically be included here)*
-
+   
 ### Example User Flow
 ```
 App Launch
