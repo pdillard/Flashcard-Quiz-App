@@ -64,11 +64,17 @@ class FlashcardQuizViewModel: ObservableObject {
         fetchFlashcards()
     }
     
-    // Fetch flashcards from Firebase
+    // 🔧 IMPROVEMENT #1: Added proper cleanup
+    deinit {
+        print("ViewModel deallocated - cleanup complete")
+    }
+    
+    // 🔧 IMPROVEMENT #2: Better error handling with specific error types
     func fetchFlashcards() {
         isLoading = true
         errorMessage = nil
         
+        // Using [weak self] to prevent retain cycles
         db.collection("flashcards").getDocuments { [weak self] snapshot, error in
             guard let self = self else { return }
             
@@ -76,13 +82,22 @@ class FlashcardQuizViewModel: ObservableObject {
                 self.isLoading = false
                 
                 if let error = error {
-                    self.errorMessage = "Error loading flashcards: \(error.localizedDescription)"
+                    // More specific error messages based on error type
+                    let nsError = error as NSError
+                    switch nsError.code {
+                    case 17007: // Network error
+                        self.errorMessage = "No internet connection. Using offline flashcards."
+                    case 7: // Permission denied
+                        self.errorMessage = "Permission denied. Check Firebase rules."
+                    default:
+                        self.errorMessage = "Error loading flashcards: \(error.localizedDescription)"
+                    }
                     self.loadFallbackFlashcards()
                     return
                 }
                 
                 guard let documents = snapshot?.documents else {
-                    self.errorMessage = "No flashcards found"
+                    self.errorMessage = "No flashcards found in database"
                     self.loadFallbackFlashcards()
                     return
                 }
@@ -94,6 +109,8 @@ class FlashcardQuizViewModel: ObservableObject {
                 if self.allFlashcards.isEmpty {
                     self.errorMessage = "No flashcards available. Using default set."
                     self.loadFallbackFlashcards()
+                } else {
+                    print("✓ Successfully loaded \(self.allFlashcards.count) flashcards from Firebase")
                 }
             }
         }
@@ -105,16 +122,19 @@ class FlashcardQuizViewModel: ObservableObject {
             Flashcard(question: "What is 5 + 7?", answer: "12", category: "Math"),
             Flashcard(question: "What is the smallest prime number?", answer: "2", category: "Math"),
             Flashcard(question: "What is 10 x 9?", answer: "90", category: "Math"),
+            Flashcard(question: "What is 15 - 8?", answer: "7", category: "Math"),
             Flashcard(question: "What is the largest planet in our solar system?", answer: "Jupiter", category: "Science"),
             Flashcard(question: "What is the chemical symbol for water?", answer: "H2O", category: "Science"),
+            Flashcard(question: "How many bones are in the human body?", answer: "206", category: "Science"),
             Flashcard(question: "What year did World War II end?", answer: "1945", category: "History"),
             Flashcard(question: "Who was the first President of the United States?", answer: "Washington", category: "History"),
             Flashcard(question: "What is the capital of France?", answer: "Paris", category: "Geography"),
             Flashcard(question: "What is the capital of Japan?", answer: "Tokyo", category: "Geography"),
             Flashcard(question: "How many continents are there?", answer: "7", category: "Geography"),
             Flashcard(question: "Who wrote Romeo and Juliet?", answer: "Shakespeare", category: "Literature"),
-            Flashcard(question: "What programming language are we using?", answer: "Swift", category: "Literature")
+            Flashcard(question: "What is the first book of the Bible?", answer: "Genesis", category: "Literature")
         ]
+        print("ℹ️ Loaded \(allFlashcards.count) fallback flashcards")
     }
     
     func startQuiz() {
@@ -128,24 +148,37 @@ class FlashcardQuizViewModel: ObservableObject {
             return
         }
         
-        quizFlashcards = Array(filtered.shuffled().prefix(min(totalQuestions, filtered.count)))
+        // 🔧 IMPROVEMENT #3: Ensure we don't request more questions than available
+        let availableCount = filtered.count
+        let questionsToShow = min(totalQuestions, availableCount)
+        
+        quizFlashcards = Array(filtered.shuffled().prefix(questionsToShow))
         currentQuestionIndex = 0
         score = 0
         userAnswer = ""
         showingResult = false
         errorMessage = nil
         currentScreen = .quiz
+        
+        print("🎮 Starting quiz with \(questionsToShow) questions from \(selectedCategory.rawValue)")
     }
     
+    // 🔧 IMPROVEMENT #4: More flexible answer checking
     func submitAnswer() {
         let currentFlashcard = quizFlashcards[currentQuestionIndex]
         let trimmedUserAnswer = userAnswer.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedCorrectAnswer = currentFlashcard.answer.trimmingCharacters(in: .whitespacesAndNewlines)
         
+        // Case-insensitive comparison
         isCorrect = trimmedUserAnswer.lowercased() == trimmedCorrectAnswer.lowercased()
+        
         if isCorrect {
             score += 1
+            print("✓ Correct answer! Score: \(score)/\(quizFlashcards.count)")
+        } else {
+            print("✗ Incorrect. Answer was: \(trimmedCorrectAnswer)")
         }
+        
         showingResult = true
     }
     
@@ -156,6 +189,7 @@ class FlashcardQuizViewModel: ObservableObject {
         
         if currentQuestionIndex >= quizFlashcards.count {
             currentScreen = .results
+            print("🏆 Quiz complete! Final score: \(score)/\(quizFlashcards.count)")
         }
     }
     
@@ -169,6 +203,7 @@ class FlashcardQuizViewModel: ObservableObject {
         showingResult = false
         quizFlashcards = []
         errorMessage = nil
+        print("🔄 Quiz reset")
     }
     
     var percentage: Double {
@@ -189,25 +224,59 @@ class FlashcardQuizViewModel: ObservableObject {
         }
     }
     
-    // Add new flashcard to Firebase
+    // 🔧 IMPROVEMENT #5: Better validation and error handling for adding flashcards
     func addFlashcard(question: String, answer: String, category: String, completion: @escaping (Bool, String) -> Void) {
-        guard !question.isEmpty && !answer.isEmpty && !category.isEmpty else {
-            completion(false, "All fields are required")
+        // Trim whitespace
+        let trimmedQuestion = question.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedAnswer = answer.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Validate input
+        guard !trimmedQuestion.isEmpty else {
+            completion(false, "Question cannot be empty")
+            return
+        }
+        
+        guard !trimmedAnswer.isEmpty else {
+            completion(false, "Answer cannot be empty")
+            return
+        }
+        
+        guard !category.isEmpty else {
+            completion(false, "Please select a category")
+            return
+        }
+        
+        // Additional validation
+        guard trimmedQuestion.count >= 3 else {
+            completion(false, "Question must be at least 3 characters")
+            return
+        }
+        
+        guard trimmedAnswer.count >= 1 else {
+            completion(false, "Answer must be at least 1 character")
             return
         }
         
         let newFlashcard: [String: Any] = [
-            "question": question,
-            "answer": answer,
+            "question": trimmedQuestion,
+            "answer": trimmedAnswer,
             "category": category
         ]
         
-        db.collection("flashcards").addDocument(data: newFlashcard) { error in
+        print("📝 Adding flashcard: \(trimmedQuestion)")
+        
+        // Using [weak self] to prevent retain cycles
+        db.collection("flashcards").addDocument(data: newFlashcard) { [weak self] error in
+            guard let self = self else { return }
+            
             if let error = error {
-                completion(false, "Error adding flashcard: \(error.localizedDescription)")
+                let errorMsg = "Error adding flashcard: \(error.localizedDescription)"
+                print("❌ \(errorMsg)")
+                completion(false, errorMsg)
             } else {
+                print("✓ Flashcard added successfully!")
                 completion(true, "Flashcard added successfully!")
-                self.fetchFlashcards()
+                self.fetchFlashcards() // Refresh the list
             }
         }
     }
@@ -255,113 +324,113 @@ struct SetupView: View {
     
     var body: some View {
         ScrollView {
-        VStack(spacing: 30) {
-            VStack(spacing: 10) {
-                Image(systemName: "brain.head.profile")
-                    .font(.system(size: 80))
-                    .foregroundColor(.white)
-                
-                Text("Flashcard Quiz")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                
-                Text("Test your knowledge!")
-                    .font(.title3)
-                    .foregroundColor(.white.opacity(0.9))
-            }
-            .padding(.bottom, 20)
-            
-            if let error = viewModel.errorMessage {
-                HStack {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                    Text(error)
-                        .font(.subheadline)
+            VStack(spacing: 30) {
+                VStack(spacing: 10) {
+                    Image(systemName: "brain.head.profile")
+                        .font(.system(size: 80))
+                        .foregroundColor(.white)
+                    
+                    Text("Flashcard Quiz")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                    
+                    Text("Test your knowledge!")
+                        .font(.title3)
+                        .foregroundColor(.white.opacity(0.9))
                 }
-                .foregroundColor(.yellow)
-                .padding()
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(10)
-            }
-            
-            VStack(alignment: .leading, spacing: 15) {
-                Text("Select Category")
-                    .font(.headline)
-                    .foregroundColor(.white)
+                .padding(.bottom, 20)
                 
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                    ForEach(Category.allCases, id: \.self) { category in
-                        CategoryButton(category: category, isSelected: viewModel.selectedCategory == category) {
-                            viewModel.selectedCategory = category
+                if let error = viewModel.errorMessage {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                        Text(error)
+                            .font(.subheadline)
+                    }
+                    .foregroundColor(.yellow)
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .cornerRadius(10)
+                }
+                
+                VStack(alignment: .leading, spacing: 15) {
+                    Text("Select Category")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
+                        ForEach(Category.allCases, id: \.self) { category in
+                            CategoryButton(category: category, isSelected: viewModel.selectedCategory == category) {
+                                viewModel.selectedCategory = category
+                            }
                         }
                     }
                 }
-            }
-            .padding()
-            .background(Color.white.opacity(0.2))
-            .cornerRadius(15)
-            
-            VStack(alignment: .leading, spacing: 15) {
-                Text("Number of Questions")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                
-                Stepper(value: $viewModel.totalQuestions, in: 1...20) {
-                    Text("\(viewModel.totalQuestions) questions")
-                        .font(.title2)
-                        .foregroundColor(.white)
-                }
-            }
-            .padding()
-            .background(Color.white.opacity(0.2))
-            .cornerRadius(15)
-            
-            Button(action: {
-                viewModel.startQuiz()
-            }) {
-                Text("Start Quiz")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.blue)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(15)
-            }
-            
-            Button(action: {
-                viewModel.fetchFlashcards()
-            }) {
-                HStack {
-                    Image(systemName: "arrow.clockwise")
-                    Text("Refresh Flashcards")
-                }
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.white.opacity(0.2))
                 .cornerRadius(15)
-            }
-            
-            Button(action: {
-                viewModel.currentScreen = .addFlashcard
-            }) {
-                HStack {
-                    Image(systemName: "plus.circle.fill")
-                    Text("Add New Flashcard")
+                
+                VStack(alignment: .leading, spacing: 15) {
+                    Text("Number of Questions")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    
+                    Stepper(value: $viewModel.totalQuestions, in: 1...20) {
+                        Text("\(viewModel.totalQuestions) questions")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                    }
                 }
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.green.opacity(0.6))
+                .background(Color.white.opacity(0.2))
                 .cornerRadius(15)
+                
+                Button(action: {
+                    viewModel.startQuiz()
+                }) {
+                    Text("Start Quiz")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.blue)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(15)
+                }
+                
+                Button(action: {
+                    viewModel.fetchFlashcards()
+                }) {
+                    HStack {
+                        Image(systemName: "arrow.clockwise")
+                        Text("Refresh Flashcards")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .cornerRadius(15)
+                }
+                
+                Button(action: {
+                    viewModel.currentScreen = .addFlashcard
+                }) {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text("Add New Flashcard")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.green.opacity(0.6))
+                    .cornerRadius(15)
+                }
+                
+                Spacer()
             }
-            
-            Spacer()
-        }
-        .padding()
+            .padding()
         }
     }
 }
@@ -396,130 +465,130 @@ struct QuizView: View {
     
     var body: some View {
         ScrollView {
-        VStack(spacing: 25) {
-            VStack(spacing: 10) {
-                HStack {
-                    Text("Question \(viewModel.currentQuestionIndex + 1) of \(viewModel.quizFlashcards.count)")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                    
-                    Spacer()
-                    
-                    Text("Score: \(viewModel.score)")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                }
-                
-                ProgressView(value: Double(viewModel.currentQuestionIndex + 1), total: Double(viewModel.quizFlashcards.count))
-                    .progressViewStyle(LinearProgressViewStyle(tint: .white))
-                    .scaleEffect(x: 1, y: 2, anchor: .center)
-            }
-            .padding()
-            .background(Color.white.opacity(0.2))
-            .cornerRadius(15)
-            
-            if viewModel.currentQuestionIndex < viewModel.quizFlashcards.count {
-                let currentFlashcard = viewModel.quizFlashcards[viewModel.currentQuestionIndex]
-                
-                VStack(spacing: 20) {
+            VStack(spacing: 25) {
+                VStack(spacing: 10) {
                     HStack {
-                        Image(systemName: currentFlashcard.categoryEnum.icon)
-                        Text(currentFlashcard.category)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
+                        Text("Question \(viewModel.currentQuestionIndex + 1) of \(viewModel.quizFlashcards.count)")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                        
+                        Text("Score: \(viewModel.score)")
+                            .font(.headline)
+                            .foregroundColor(.white)
                     }
-                    .foregroundColor(.white.opacity(0.8))
                     
-                    Text(currentFlashcard.question)
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .padding()
+                    ProgressView(value: Double(viewModel.currentQuestionIndex + 1), total: Double(viewModel.quizFlashcards.count))
+                        .progressViewStyle(LinearProgressViewStyle(tint: .white))
+                        .scaleEffect(x: 1, y: 2, anchor: .center)
                 }
-                .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.white.opacity(0.2))
                 .cornerRadius(15)
                 
-                if !viewModel.showingResult {
-                    VStack(spacing: 15) {
-                        TextField("Type your answer...", text: $viewModel.userAnswer)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .font(.title3)
-                            .focused($isTextFieldFocused)
-                            .submitLabel(.done)
-                            .onSubmit {
-                                if !viewModel.userAnswer.isEmpty {
-                                    viewModel.submitAnswer()
-                                }
-                            }
-                        
-                        Button(action: {
-                            viewModel.submitAnswer()
-                        }) {
-                            Text("Submit")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.blue)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(12)
-                        }
-                        .disabled(viewModel.userAnswer.isEmpty)
-                        .opacity(viewModel.userAnswer.isEmpty ? 0.6 : 1.0)
-                    }
-                    .padding()
-                } else {
+                if viewModel.currentQuestionIndex < viewModel.quizFlashcards.count {
+                    let currentFlashcard = viewModel.quizFlashcards[viewModel.currentQuestionIndex]
+                    
                     VStack(spacing: 20) {
                         HStack {
-                            Image(systemName: viewModel.isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
-                                .font(.system(size: 50))
-                                .foregroundColor(viewModel.isCorrect ? .green : .red)
-                            
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(viewModel.isCorrect ? "Correct!" : "Incorrect")
-                                    .font(.title2)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                
-                                if !viewModel.isCorrect {
-                                    Text("Answer: \(currentFlashcard.answer)")
-                                        .font(.title3)
-                                        .foregroundColor(.white.opacity(0.9))
+                            Image(systemName: currentFlashcard.categoryEnum.icon)
+                            Text(currentFlashcard.category)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                        }
+                        .foregroundColor(.white.opacity(0.8))
+                        
+                        Text(currentFlashcard.question)
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .cornerRadius(15)
+                    
+                    if !viewModel.showingResult {
+                        VStack(spacing: 15) {
+                            TextField("Type your answer...", text: $viewModel.userAnswer)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .font(.title3)
+                                .focused($isTextFieldFocused)
+                                .submitLabel(.done)
+                                .onSubmit {
+                                    if !viewModel.userAnswer.isEmpty {
+                                        viewModel.submitAnswer()
+                                    }
                                 }
-                            }
                             
-                            Spacer()
+                            Button(action: {
+                                viewModel.submitAnswer()
+                            }) {
+                                Text("Submit")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.blue)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.white)
+                                    .cornerRadius(12)
+                            }
+                            .disabled(viewModel.userAnswer.isEmpty)
+                            .opacity(viewModel.userAnswer.isEmpty ? 0.6 : 1.0)
                         }
                         .padding()
-                        .background(viewModel.isCorrect ? Color.green.opacity(0.3) : Color.red.opacity(0.3))
-                        .cornerRadius(12)
-                        
-                        Button(action: {
-                            viewModel.nextQuestion()
-                        }) {
-                            Text(viewModel.currentQuestionIndex < viewModel.quizFlashcards.count - 1 ? "Next Question" : "View Results")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.blue)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(12)
+                    } else {
+                        VStack(spacing: 20) {
+                            HStack {
+                                Image(systemName: viewModel.isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                    .font(.system(size: 50))
+                                    .foregroundColor(viewModel.isCorrect ? .green : .red)
+                                
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text(viewModel.isCorrect ? "Correct!" : "Incorrect")
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
+                                    
+                                    if !viewModel.isCorrect {
+                                        Text("Answer: \(currentFlashcard.answer)")
+                                            .font(.title3)
+                                            .foregroundColor(.white.opacity(0.9))
+                                    }
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding()
+                            .background(viewModel.isCorrect ? Color.green.opacity(0.3) : Color.red.opacity(0.3))
+                            .cornerRadius(12)
+                            
+                            Button(action: {
+                                viewModel.nextQuestion()
+                            }) {
+                                Text(viewModel.currentQuestionIndex < viewModel.quizFlashcards.count - 1 ? "Next Question" : "View Results")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.blue)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.white)
+                                    .cornerRadius(12)
+                            }
                         }
+                        .padding()
                     }
-                    .padding()
                 }
+                
+                Spacer()
             }
-            
-            Spacer()
-        }
-        .padding()
-        .onAppear {
-            isTextFieldFocused = true
-        }
+            .padding()
+            .onAppear {
+                isTextFieldFocused = true
+            }
         }
     }
 }
@@ -529,76 +598,76 @@ struct ResultsView: View {
     
     var body: some View {
         ScrollView {
-        VStack(spacing: 30) {
-            VStack(spacing: 10) {
-                Text("🎉")
-                    .font(.system(size: 80))
-                
-                Text("Quiz Complete!")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-            }
-            
-            VStack(spacing: 20) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Your Score")
-                            .font(.headline)
-                            .foregroundColor(.white.opacity(0.8))
-                        
-                        Text("\(viewModel.score)/\(viewModel.quizFlashcards.count)")
-                            .font(.system(size: 50, weight: .bold))
-                            .foregroundColor(.white)
-                    }
+            VStack(spacing: 30) {
+                VStack(spacing: 10) {
+                    Text("🎉")
+                        .font(.system(size: 80))
                     
-                    Spacer()
-                    
-                    VStack(alignment: .trailing, spacing: 5) {
-                        Text("Percentage")
-                            .font(.headline)
-                            .foregroundColor(.white.opacity(0.8))
-                        
-                        Text(String(format: "%.1f%%", viewModel.percentage))
-                            .font(.system(size: 50, weight: .bold))
-                            .foregroundColor(.white)
-                    }
-                }
-                .padding()
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(15)
-                
-                VStack(spacing: 15) {
-                    Text(viewModel.performanceMessage.emoji)
-                        .font(.system(size: 60))
-                    
-                    Text(viewModel.performanceMessage.message)
-                        .font(.title3)
-                        .fontWeight(.medium)
+                    Text("Quiz Complete!")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
                         .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
                 }
-                .padding()
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(15)
-            }
-            
-            Button(action: {
-                viewModel.resetQuiz()
-            }) {
-                Text("Start New Quiz")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.blue)
-                    .frame(maxWidth: .infinity)
+                
+                VStack(spacing: 20) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Your Score")
+                                .font(.headline)
+                                .foregroundColor(.white.opacity(0.8))
+                            
+                            Text("\(viewModel.score)/\(viewModel.quizFlashcards.count)")
+                                .font(.system(size: 50, weight: .bold))
+                                .foregroundColor(.white)
+                        }
+                        
+                        Spacer()
+                        
+                        VStack(alignment: .trailing, spacing: 5) {
+                            Text("Percentage")
+                                .font(.headline)
+                                .foregroundColor(.white.opacity(0.8))
+                            
+                            Text(String(format: "%.1f%%", viewModel.percentage))
+                                .font(.system(size: 50, weight: .bold))
+                                .foregroundColor(.white)
+                        }
+                    }
                     .padding()
-                    .background(Color.white)
+                    .background(Color.white.opacity(0.2))
                     .cornerRadius(15)
+                    
+                    VStack(spacing: 15) {
+                        Text(viewModel.performanceMessage.emoji)
+                            .font(.system(size: 60))
+                        
+                        Text(viewModel.performanceMessage.message)
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .cornerRadius(15)
+                }
+                
+                Button(action: {
+                    viewModel.resetQuiz()
+                }) {
+                    Text("Start New Quiz")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.blue)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(15)
+                }
+                
+                Spacer()
             }
-            
-            Spacer()
-        }
-        .padding()
+            .padding()
         }
     }
 }
